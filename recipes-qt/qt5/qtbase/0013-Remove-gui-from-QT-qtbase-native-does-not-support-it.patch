@@ -1,0 +1,30 @@
+From a7b20b409cdf7fa9dc580ac83d705c42870dc57d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Wed, 11 Apr 2018 17:53:16 +0200
+Subject: [PATCH] Remove gui from QT - qtbase-native does not support it
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This fixes build for qbs-native
+
+Upstream-Status: Pending
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ mkspecs/features/spec_pre.prf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mkspecs/features/spec_pre.prf b/mkspecs/features/spec_pre.prf
+index 51ea3a8321..767f4e7c7a 100644
+--- a/mkspecs/features/spec_pre.prf
++++ b/mkspecs/features/spec_pre.prf
+@@ -52,4 +52,4 @@ equals(QMAKE_HOST.os, Windows) {
+ }
+ 
+ CONFIG = file_copies qmake_use qt warn_on release link_prl
+-QT = core gui
++QT = core
+-- 
+2.14.3
+
