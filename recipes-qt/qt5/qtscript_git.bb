@@ -31,3 +31,5 @@ DEPENDS += "qtbase"
 LDFLAGS_append_x86 = "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-gold', ' -fuse-ld=bfd ', '', d)}"
 
 SRCREV = "8399cdfbaf2aceab9c22fdcb10d2369ddb39b5df"
+
+BBCLASSEXTEND = "native"
