@@ -1,0 +1,33 @@
+From ebc23ac27f1b8c1d8d32364a535d4b6767109342 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Thu, 12 Apr 2018 09:46:56 +0200
+Subject: [PATCH] Do not kill our link flags
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Before Qbs we were quite happy with "absurd qmake's soname logic"
+
+Upstream-Status: Inappropriate [OE specific]
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ src/lib/library.pri | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/library.pri b/src/lib/library.pri
+index 63f48a9a..2696ff9c 100644
+--- a/src/lib/library.pri
++++ b/src/lib/library.pri
+@@ -31,8 +31,6 @@ VERSION = $${QBS_VERSION}
+ 
+ linux {
+     # Turn off absurd qmake's soname "logic" and directly add the linker flag.
+-    QMAKE_LFLAGS_SONAME =
+-    QMAKE_LFLAGS = -Wl,-soname=lib$${TARGET}.so.$${QBS_VERSION_MAJ}.$${QBS_VERSION_MIN}
+ }
+ 
+ win32 {
+-- 
+2.14.3
+

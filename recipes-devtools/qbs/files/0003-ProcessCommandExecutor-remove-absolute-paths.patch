@@ -1,0 +1,63 @@
+From cae7ff21fcad2042de9c51545bfa62a59e111309 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Fri, 13 Apr 2018 09:39:35 +0200
+Subject: [PATCH] ProcessCommandExecutor: remove absolute paths
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Stating applications with absolute paths won't work in OE environment. To get
+over this, our build system sets paths accoring to environment. It should
+replace '%OE_BIN_PATHS%' by ${bindir} or other paths to remove absolute paths
+form.
+
+Upstream-Status: Inappropriate [OE specific]
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ .../corelib/buildgraph/processcommandexecutor.cpp  | 28 +++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/corelib/buildgraph/processcommandexecutor.cpp b/src/lib/corelib/buildgraph/processcommandexecutor.cpp
+index 2442f7a7..390b76a4 100644
+--- a/src/lib/corelib/buildgraph/processcommandexecutor.cpp
++++ b/src/lib/corelib/buildgraph/processcommandexecutor.cpp
+@@ -111,8 +111,34 @@ void ProcessCommandExecutor::doSetup()
+     for (const QString &key : cmd->relevantEnvVars())
+         cmd->addRelevantEnvValue(key, transformer()->product()->buildEnvironment.value(key));
+ 
++    // ------------  OE-specific start  ------------
++    // 1. Hackaway absolute paths: %OE_BIN_PATHS% is replaced by a ':' separated list
++    //    of paths to remove.
++    QString oeBinPaths = QLatin1String("%OE_BIN_PATHS%");
++    QString oeProgram = program;
++    foreach (QString path, oeBinPaths.split(QLatin1Char(':'))) {
++        if (path.isEmpty()) {
++            continue;
++        }
++        if (!path.endsWith(QLatin1Char('/'))) {
++			path += QLatin1Char('/');
++        }
++        int index = oeProgram.indexOf(path);
++        if (index == 0) {
++            // remove path
++            oeProgram = oeProgram.right(oeProgram.size()-path.size());
++            // remove leading '/'
++            if (oeProgram.startsWith(QLatin1Char('/'))) {
++                oeProgram = oeProgram.right(oeProgram.size()-1);
++            }
++            // do not align more than one time
++            break;
++        }
++    }
++    // ------------   OE-specific end   ------------
++
+     m_commandEnvironment = mergeEnvironments(m_buildEnvironment, cmd->environment());
+-    m_program = program;
++    m_program = oeProgram; // use OE aligned variant
+     m_arguments = cmd->arguments();
+     m_shellInvocation = shellQuote(QDir::toNativeSeparators(m_program), m_arguments);
+ }
+-- 
+2.14.3
+

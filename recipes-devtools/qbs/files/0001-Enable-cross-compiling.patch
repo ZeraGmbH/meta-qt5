@@ -1,0 +1,31 @@
+From cc15d22440becce963ba04e78fca37865d473b93 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Tue, 10 Apr 2018 16:54:00 +0200
+Subject: [PATCH] Enable cross-compiling
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It is not easy to keep this uncommented: Qt invents yet another 'this is it'
+buildtool and does not allow cross compiling!
+
+Upstream-Status: Inappropriate [OE specific]
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ qbs.pro | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/qbs.pro b/qbs.pro
+index c3fa48fa..90edad6f 100644
+--- a/qbs.pro
++++ b/qbs.pro
+@@ -1,5 +1,3 @@
+-requires(!cross_compile)
+-
+ defineTest(minQtVersion) {
+     maj = $$1
+     min = $$2
+-- 
+2.14.3
+
